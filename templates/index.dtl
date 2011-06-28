@@ -1,0 +1,24 @@
+<table>
+  <thead>
+    <tr>
+      <th class="name"><span>File</span></th>
+      <th class="description"><span>Description</span></th>
+      <th class="created"><span>Created</span></th>
+    </tr>
+  </thead>  
+  <tbody>
+  {% for record, id, name, description, created in uploads %}
+    <tr>
+      <td class="name"><a href="/show/{{ id }}" title="{{ description }}">{{ name|truncatewords:4 }}</a></td>
+      <td>{{ description|truncatewords:8 }}</td>
+      <td class="created">{{ created|timesince }} ago</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+  <tfoot>
+    <tr>
+      <td colspan="3">
+        <div class="count">{{ uploads|length }} Files</div>
+      </td>
+  </tfoot>
+</table>
