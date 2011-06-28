@@ -118,15 +118,18 @@ This is handled via a <code>404</code> in <a href="dispatcher.html">dispatcher.e
         <div class="octowrap">
           <a class="octothorpe" href="#section-7">#</a>
         </div>
-        <p>Save an <code>upload</code> record optionally setting its <code>Id</code> if none is specified.</p>
+        <p>Save an <code>upload</code> record optionally setting its <code>Id</code> if none is specified.
+Performs basic validation of a record.</p>
       </td>
       <td class=code>
-        <div class='highlight'><pre><div class="highlight"><pre><span class="nf">save</span><span class="p">(</span><span class="nv">Upload</span><span class="o">=</span><span class="nl">#upload</span><span class="p">{</span><span class="n">id</span><span class="o">=</span><span class="nv">Id</span><span class="p">})</span> <span class="o">-&gt;</span>
-    <span class="nv">NewId</span> <span class="o">=</span> <span class="k">case</span> <span class="nv">Id</span> <span class="k">of</span>
-                <span class="n">none</span> <span class="o">-&gt;</span> <span class="n">next_upload_id</span><span class="p">();</span>
-                <span class="nv">Id</span> <span class="o">-&gt;</span> <span class="nv">Id</span>
-            <span class="k">end</span><span class="p">,</span>
-    <span class="n">execute</span><span class="p">(</span><span class="k">fun</span> <span class="nn">mnesia</span><span class="p">:</span><span class="n">write</span><span class="o">/</span><span class="mi">1</span><span class="p">,</span> <span class="p">[</span><span class="nv">Upload</span><span class="nl">#upload</span><span class="p">{</span><span class="n">id</span><span class="o">=</span><span class="nv">NewId</span><span class="p">}]),</span>
+        <div class='highlight'><pre><div class="highlight"><pre><span class="nf">save</span><span class="p">(</span><span class="nv">Upload</span><span class="o">=</span><span class="nl">#upload</span><span class="p">{</span><span class="n">name</span><span class="o">=</span><span class="n">none</span><span class="p">})</span> <span class="o">-&gt;</span> 
+    <span class="nv">Upload</span><span class="p">;</span>
+<span class="nf">save</span><span class="p">(</span><span class="nv">Upload</span><span class="o">=</span><span class="nl">#upload</span><span class="p">{</span><span class="n">description</span><span class="o">=</span><span class="n">none</span><span class="p">})</span> <span class="o">-&gt;</span> 
+    <span class="nv">Upload</span><span class="p">;</span>
+<span class="nf">save</span><span class="p">(</span><span class="nv">Upload</span><span class="o">=</span><span class="nl">#upload</span><span class="p">{</span><span class="n">id</span><span class="o">=</span><span class="n">none</span><span class="p">})</span> <span class="o">-&gt;</span>
+    <span class="n">save</span><span class="p">(</span><span class="nv">Upload</span><span class="nl">#upload</span><span class="p">{</span><span class="n">id</span><span class="o">=</span><span class="n">next_upload_id</span><span class="p">()};</span>
+<span class="nf">save</span><span class="p">(</span><span class="nv">Upload</span><span class="o">=</span><span class="nl">#upload</span><span class="p">{})</span> <span class="o">-&gt;</span>
+    <span class="n">execute</span><span class="p">(</span><span class="k">fun</span> <span class="nn">mnesia</span><span class="p">:</span><span class="n">write</span><span class="o">/</span><span class="mi">1</span><span class="p">,</span> <span class="p">[</span><span class="nv">Upload</span><span class="p">]),</span>
     <span class="nv">Upload</span><span class="p">.</span></pre></div></pre></div>
       </td>
     </tr><tr id='section-8'>
