@@ -1,0 +1,41 @@
+<iframe id="upload_frame" name="upload_frame" src="#" style="width:0;height:0;border:0;"></iframe>  
+<form id="upload_form" action="/" method="post" enctype="multipart/form-data" target="upload_frame">
+    <input id="key" name="key" type="hidden" value="{{ key }}">
+    <div class="file">
+      <label for="file">File</label>    
+      <div class="wrapper"> 
+        <input id="file" name="file" type="file" value="Select a file" />
+      </div>
+    </div>
+    <div class="text">
+      <label for="description">Description</label>
+      <div class="wrapper">
+        <textarea id="description" name="description">{{ description }}</textarea>
+      </div>
+    </div>
+    <div id="upload_status" class="status">
+        <label for="bar">Progress</label>
+        <div class="wrapper">
+          <div id="bar" class="bar">
+              <div id="progress" class="progress"></div>
+          </div>
+        </div>
+    </div>
+    <div id="upload_success" class="notification">
+      <label>Success!</label>      
+      <div class="wrapper">
+        <span class="note"><a id="show_link" href="#">:(</a></span>
+      </div>
+    </div>  
+    <div id="upload_error" class="notification">
+      <label>Error!</label>      
+      <div class="wrapper">
+        <span class="note">Something happened, and your upload didn't complete :(</span>
+      </div>
+    </div>
+    <div id="upload_buttons" class="buttons">
+        <input type="submit" value="Upload" />
+        <span class="note">or <a href="/" title="Cancel">cancel</a> and return to the home page.</span>
+    </div>
+</form>
+   
