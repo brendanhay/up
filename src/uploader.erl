@@ -116,7 +116,7 @@ file_completed(Context=#con{key=Key}) ->
 
 %% Saves the `upload` record using [[datastore.erl]] and gets the
 %% `upload_path` to copy the temporary file to.
-save(#con{key=Key, path=Path, upload=Upload}) ->
+save(#con{path=Path, upload=Upload}) ->
     To = config:upload_path(datastore:save(Upload)),
     move(Path, To).
 
@@ -126,7 +126,7 @@ move(Path, To) ->
     ok = filelib:ensure_dir(To),
     {ok, _Size} = file:copy(Path, To),
     ok = file:delete(Path),    
-    logger:info(Key, "moved ~s to ~p", [Path, To]).
+    logger:info("Move", "~s to ~p", [Path, To]).
 
 %% Get the transferred amount of bytes vs the total in a truncated
 %% float to send to the progress monitor. Done in a fairly messy fashion

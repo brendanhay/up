@@ -16,7 +16,7 @@ start() -> supervisor:start_link({local, ?MODULE}, ?MODULE, []).
 
 init([]) ->
     Config = [{ip, {0,0,0,0}}, {port, 8080}],
-    Specs = [spec(logger), spec(dispatcher, [Config], 5000, dynamic), spec(uploader)],
+    Specs = [spec(logger), spec(dispatcher, [Config], 5000, dynamic), spec(progress)],
     Strategy = {one_for_one, 10, 10},
     {ok, {Strategy, Specs}}.
 

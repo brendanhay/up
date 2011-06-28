@@ -19,10 +19,12 @@
 %% 2. Ensure the dependency paths have been set and any dependencies loaded.
 %% 3. Start the datastore (mnesia) and create a schema if neccessary.
 %% 4. Finally, start the [main supervision tree](sup.html).
-start() -> ensure_started(up).
+start() -> 
+    ensure_started(crypto),
+    ensure_started(up).
 
 start(_Type, _StartArgs) ->
-    ensure_started(crypto),
+    
     config:ensure(),
     datastore:start(), 
     sup:start().
