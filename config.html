@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <title>config.erl</title>
+  <link rel="stylesheet" href="pycco.css">
+</head>
+<body>
+<div id='container'>
+  <div id="background"></div>
+  
+  <table cellspacing=0 cellpadding=0>
+  <thead>
+    <tr>
+      <th class=docs><h1>config.erl</h1></th>
+      <th class=code></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr id='section-0'>
+      <td class=docs>
+        <div class="octowrap">
+          <a class="octothorpe" href="#section-0">#</a>
+        </div>
+        <p>Taken from the <code>mochiweb</code> skeleton, ensures that the relatively-installed
+dependencies are on the code loading path, and locate resources relative
+to this application's path.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre><div class="highlight"><pre><span class="p">-</span><span class="ni">module</span><span class="p">(</span><span class="n">config</span><span class="p">).</span>
+
+<span class="p">-</span><span class="ni">export</span><span class="p">([</span><span class="n">ensure</span><span class="o">/</span><span class="mi">0</span><span class="p">,</span> <span class="n">ensure</span><span class="o">/</span><span class="mi">1</span><span class="p">]).</span>
+<span class="p">-</span><span class="ni">export</span><span class="p">([</span><span class="n">tmp_path</span><span class="o">/</span><span class="mi">1</span><span class="p">,</span> <span class="n">template_path</span><span class="o">/</span><span class="mi">1</span><span class="p">,</span> <span class="n">www_path</span><span class="o">/</span><span class="mi">0</span><span class="p">,</span> <span class="n">www_path</span><span class="o">/</span><span class="mi">1</span><span class="p">,</span> <span class="n">uploads_path</span><span class="o">/</span><span class="mi">1</span><span class="p">,</span> <span class="n">upload_path</span><span class="o">/</span><span class="mi">1</span><span class="p">]).</span></pre></div></pre></div>
+      </td>
+    </tr><tr id='section-1'>
+      <td class=docs>
+        <div class="octowrap">
+          <a class="octothorpe" href="#section-1">#</a>
+        </div>
+        <p>Various macros specifying the relative locations of server resources.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre><div class="highlight"><pre><span class="p">-</span><span class="ni">define</span><span class="p">(</span><span class="no">TMP</span><span class="p">,</span> <span class="s">&quot;priv/tmp/&quot;</span><span class="p">).</span>
+<span class="p">-</span><span class="ni">define</span><span class="p">(</span><span class="no">DATA</span><span class="p">,</span> <span class="s">&quot;priv/data/&quot;</span><span class="p">).</span>
+<span class="p">-</span><span class="ni">define</span><span class="p">(</span><span class="no">WWW</span><span class="p">,</span> <span class="s">&quot;priv/www/&quot;</span><span class="p">).</span>
+<span class="p">-</span><span class="ni">define</span><span class="p">(</span><span class="no">UPLOADS</span><span class="p">,</span> <span class="o">?</span><span class="nv">WWW</span> <span class="o">++</span> <span class="s">&quot;uploads/&quot;</span><span class="p">).</span>
+<span class="p">-</span><span class="ni">define</span><span class="p">(</span><span class="no">TEMPLATES</span><span class="p">,</span> <span class="s">&quot;templates/&quot;</span><span class="p">).</span>
+
+<span class="p">-</span><span class="ni">include</span><span class="p">(</span><span class="s">&quot;records.hrl&quot;</span><span class="p">).</span></pre></div></pre></div>
+      </td>
+    </tr><tr id='section-2'>
+      <td class=docs>
+        <div class="octowrap">
+          <a class="octothorpe" href="#section-2">#</a>
+        </div>
+        <p>Ensure that the ebin and include paths for dependencies of
+this application are on the code path. Equivalent to ensure(?Module).
+Sets <code>mnesia</code> to write its disk copies into a specified path, as opposed 
+to the standard <code>Mnesia.&lt;nonode&gt;@&lt;nodehost&gt;</code> in the root directory.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre><div class="highlight"><pre><span class="nf">ensure</span><span class="p">()</span> <span class="o">-&gt;</span>
+    <span class="nn">application</span><span class="p">:</span><span class="n">set_env</span><span class="p">(</span><span class="n">mnesia</span><span class="p">,</span> <span class="n">dir</span><span class="p">,</span> <span class="n">local_path</span><span class="p">([</span><span class="o">?</span><span class="nv">DATA</span><span class="p">])),</span>
+    <span class="n">ensure</span><span class="p">(</span><span class="o">?</span><span class="nv">MODULE</span><span class="p">).</span></pre></div></pre></div>
+      </td>
+    </tr><tr id='section-3'>
+      <td class=docs>
+        <div class="octowrap">
+          <a class="octothorpe" href="#section-3">#</a>
+        </div>
+        <p>Ensure that all ebin and include paths for dependencies
+of the application for Module are on the code path.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre><div class="highlight"><pre><span class="nf">ensure</span><span class="p">(</span><span class="nv">Module</span><span class="p">)</span> <span class="o">-&gt;</span>
+    <span class="nn">code</span><span class="p">:</span><span class="n">add_paths</span><span class="p">(</span><span class="n">new_siblings</span><span class="p">(</span><span class="nv">Module</span><span class="p">)),</span>
+    <span class="nn">code</span><span class="p">:</span><span class="n">clash</span><span class="p">(),</span>
+    <span class="n">ok</span><span class="p">.</span></pre></div></pre></div>
+      </td>
+    </tr><tr id='section-4'>
+      <td class=docs>
+        <div class="octowrap">
+          <a class="octothorpe" href="#section-4">#</a>
+        </div>
+        <p>Various helper functions for returning the path to directories and resources
+used by the application.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre><div class="highlight"><pre><span class="nf">tmp_path</span><span class="p">(</span><span class="nv">Parts</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">local_path</span><span class="p">([</span><span class="o">?</span><span class="nv">TMP</span><span class="p">|</span><span class="nv">Parts</span><span class="p">]).</span>
+
+<span class="nf">template_path</span><span class="p">(</span><span class="nv">View</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">local_path</span><span class="p">([</span><span class="o">?</span><span class="nv">TEMPLATES</span><span class="p">,</span> <span class="nv">View</span> <span class="o">++</span> <span class="s">&quot;.dtl&quot;</span><span class="p">]).</span>
+
+<span class="nf">www_path</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">www_path</span><span class="p">([]).</span>
+
+<span class="nf">www_path</span><span class="p">(</span><span class="nv">Parts</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">local_path</span><span class="p">([</span><span class="o">?</span><span class="nv">WWW</span><span class="p">|</span><span class="nv">Parts</span><span class="p">]).</span>
+
+<span class="nf">upload_path</span><span class="p">(</span><span class="nl">#upload</span><span class="p">{</span><span class="n">id</span><span class="o">=</span><span class="nv">Id</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="nv">Name</span><span class="p">})</span> <span class="o">-&gt;</span> <span class="n">uploads_path</span><span class="p">([</span><span class="nb">integer_to_list</span><span class="p">(</span><span class="nv">Id</span><span class="p">),</span> <span class="nv">Name</span><span class="p">]).</span>
+
+<span class="nf">uploads_path</span><span class="p">(</span><span class="nv">Parts</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">local_path</span><span class="p">([</span><span class="o">?</span><span class="nv">UPLOADS</span><span class="p">|</span><span class="nv">Parts</span><span class="p">]).</span></pre></div></pre></div>
+      </td>
+    </tr><tr id='section-5'>
+      <td class=docs>
+        <div class="octowrap">
+          <a class="octothorpe" href="#section-5">#</a>
+        </div>
+        <p><em>Internal function definitions taken from the skeleton <code>mochiweb:..._deps</code> module</em></p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre><div class="highlight"><pre><span class="nf">local_path</span><span class="p">(</span><span class="nv">Parts</span><span class="p">,</span> <span class="nv">Module</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nn">filename</span><span class="p">:</span><span class="n">join</span><span class="p">([</span><span class="n">get_base_dir</span><span class="p">(</span><span class="nv">Module</span><span class="p">)</span> <span class="p">|</span> <span class="nv">Parts</span><span class="p">]).</span>
+
+<span class="nf">local_path</span><span class="p">(</span><span class="nv">Parts</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">local_path</span><span class="p">(</span><span class="nv">Parts</span><span class="p">,</span> <span class="o">?</span><span class="nv">MODULE</span><span class="p">).</span>
+
+<span class="nf">get_base_dir</span><span class="p">(</span><span class="nv">Module</span><span class="p">)</span> <span class="o">-&gt;</span>
+    <span class="p">{</span><span class="n">file</span><span class="p">,</span> <span class="nv">Here</span><span class="p">}</span> <span class="o">=</span> <span class="nn">code</span><span class="p">:</span><span class="n">is_loaded</span><span class="p">(</span><span class="nv">Module</span><span class="p">),</span>
+    <span class="nn">filename</span><span class="p">:</span><span class="n">dirname</span><span class="p">(</span><span class="nn">filename</span><span class="p">:</span><span class="n">dirname</span><span class="p">(</span><span class="nv">Here</span><span class="p">)).</span>
+
+<span class="nf">deps_on_path</span><span class="p">()</span> <span class="o">-&gt;</span>
+    <span class="nv">F</span> <span class="o">=</span> <span class="k">fun</span> <span class="p">(</span><span class="nv">X</span><span class="p">,</span> <span class="nv">Acc</span><span class="p">)</span> <span class="o">-&gt;</span>
+                <span class="nv">ProjDir</span> <span class="o">=</span> <span class="nn">filename</span><span class="p">:</span><span class="n">dirname</span><span class="p">(</span><span class="nv">X</span><span class="p">),</span>
+                <span class="k">case</span> <span class="p">{</span><span class="nn">filename</span><span class="p">:</span><span class="n">basename</span><span class="p">(</span><span class="nv">X</span><span class="p">),</span>
+                      <span class="nn">filename</span><span class="p">:</span><span class="n">basename</span><span class="p">(</span><span class="nn">filename</span><span class="p">:</span><span class="n">dirname</span><span class="p">(</span><span class="nv">ProjDir</span><span class="p">))}</span> <span class="k">of</span>
+                    <span class="p">{</span><span class="s">&quot;ebin&quot;</span><span class="p">,</span> <span class="s">&quot;deps&quot;</span><span class="p">}</span> <span class="o">-&gt;</span>
+                        <span class="p">[</span><span class="nn">filename</span><span class="p">:</span><span class="n">basename</span><span class="p">(</span><span class="nv">ProjDir</span><span class="p">)</span> <span class="p">|</span> <span class="nv">Acc</span><span class="p">];</span>
+                    <span class="p">_</span> <span class="o">-&gt;</span>
+                        <span class="nv">Acc</span>
+                <span class="k">end</span>
+        <span class="k">end</span><span class="p">,</span>
+    <span class="nn">ordsets</span><span class="p">:</span><span class="n">from_list</span><span class="p">(</span><span class="nn">lists</span><span class="p">:</span><span class="n">foldl</span><span class="p">(</span><span class="nv">F</span><span class="p">,</span> <span class="p">[],</span> <span class="nn">code</span><span class="p">:</span><span class="n">get_path</span><span class="p">())).</span>
+
+<span class="nf">new_siblings</span><span class="p">(</span><span class="nv">Module</span><span class="p">)</span> <span class="o">-&gt;</span>
+    <span class="nv">Existing</span> <span class="o">=</span> <span class="n">deps_on_path</span><span class="p">(),</span>
+    <span class="nv">SiblingEbin</span> <span class="o">=</span> <span class="nn">filelib</span><span class="p">:</span><span class="n">wildcard</span><span class="p">(</span><span class="n">local_path</span><span class="p">([</span><span class="s">&quot;deps&quot;</span><span class="p">,</span> <span class="s">&quot;*&quot;</span><span class="p">,</span> <span class="s">&quot;ebin&quot;</span><span class="p">],</span> <span class="nv">Module</span><span class="p">)),</span>
+    <span class="nv">Siblings</span> <span class="o">=</span> <span class="p">[</span><span class="nn">filename</span><span class="p">:</span><span class="n">dirname</span><span class="p">(</span><span class="nv">X</span><span class="p">)</span> <span class="p">||</span> <span class="nv">X</span> <span class="o">&lt;-</span> <span class="nv">SiblingEbin</span><span class="p">,</span>
+                           <span class="nn">ordsets</span><span class="p">:</span><span class="n">is_element</span><span class="p">(</span>
+                             <span class="nn">filename</span><span class="p">:</span><span class="n">basename</span><span class="p">(</span><span class="nn">filename</span><span class="p">:</span><span class="n">dirname</span><span class="p">(</span><span class="nv">X</span><span class="p">)),</span>
+                             <span class="nv">Existing</span><span class="p">)</span> <span class="o">=</span><span class="p">:</span><span class="o">=</span> <span class="n">false</span><span class="p">],</span>
+    <span class="nn">lists</span><span class="p">:</span><span class="n">filter</span><span class="p">(</span><span class="k">fun</span> <span class="nn">filelib</span><span class="p">:</span><span class="n">is_dir</span><span class="o">/</span><span class="mi">1</span><span class="p">,</span>
+                 <span class="nn">lists</span><span class="p">:</span><span class="n">append</span><span class="p">([[</span><span class="nn">filename</span><span class="p">:</span><span class="n">join</span><span class="p">([</span><span class="nv">X</span><span class="p">,</span> <span class="s">&quot;ebin&quot;</span><span class="p">]),</span>
+                                <span class="nn">filename</span><span class="p">:</span><span class="n">join</span><span class="p">([</span><span class="nv">X</span><span class="p">,</span> <span class="s">&quot;include&quot;</span><span class="p">])]</span> <span class="p">||</span>
+                                  <span class="nv">X</span> <span class="o">&lt;-</span> <span class="nv">Siblings</span><span class="p">])).</span>
+
+</pre></div></pre></div>
+      </td>
+    </tr>
+  </table>
+</div>
+</body>
