@@ -47,8 +47,7 @@ stop() -> mochiweb_http:stop(?MODULE).
     
 %% Starts the upload process on the connected socket and returns an empty page when completed.
 'POST'([], Req) ->
-    uploader:start(Req),
-    Req:respond({200, [{"Content-Type", ?TEXT}], ""}).
+    uploader:start(Req), Req:respond({200, [{"Content-Type", ?TEXT}], "Upload completed."}).
 
 
 %% Main event loop handler which is called by `mochiweb` when an incoming connection is received.

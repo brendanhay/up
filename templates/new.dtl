@@ -24,7 +24,7 @@
     <div id="upload_success" class="notification">
       <label>Success!</label>      
       <div class="wrapper">
-        <span class="note"><a id="show_link" href="#">:(</a></span>
+        <span class="note"><a id="show_link" href="">:(</a></span>
       </div>
     </div>  
     <div id="upload_error" class="notification">

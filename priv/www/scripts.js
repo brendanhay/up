@@ -51,6 +51,7 @@
         // or hide the progress on error or completed.
         var progressBar = document.getElementById('progress');
         var updateProgress = function(response) {  
+            console.log(response);
             var percent = response.percent;          
             progressBar.style.width = percent + '%';  
             if (!(response.id > 0)) {

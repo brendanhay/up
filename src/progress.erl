@@ -45,8 +45,11 @@ handle_cast({updated, Key, Percent}, State) ->
     {noreply, New};
 %% Remove the `Key` from `State`, effectively marking it as completed.
 handle_cast({completed, Key}, State) ->
-%    {noreply, dict:erase(Key, State)}.
-    {noreply, State}.
+    New = case dict:find(Key, State) of 
+              error -> State; 
+              {ok, {Id, _Prev}} -> dict:store(Key, {Id, 101}, State)
+          end,
+    {noreply, New}.
 
 
 %% *Callbacks for the `gen_server` behaviour:*

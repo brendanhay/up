@@ -48,7 +48,7 @@ save(Upload=#upload{name=none}) ->
 save(Upload=#upload{description=none}) -> 
     Upload;
 save(Upload=#upload{id=none}) ->
-    save(Upload#upload{id=next_upload_id()};
+    save(Upload#upload{id=next_upload_id()});
 save(Upload=#upload{}) ->
     execute(fun mnesia:write/1, [Upload]),
     Upload.
