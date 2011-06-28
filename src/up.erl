@@ -1,36 +1,41 @@
-%% @author Mochi Media <dev@mochimedia.com>
-%% @copyright 2010 Mochi Media <dev@mochimedia.com>
-
-%% @doc up.
-
+%% Main OTP Application for the Super Uploader! 
+%%
+%% A thin semi-RESTful layer on top of [mochiweb](https://github.com/mochi/mochiweb), 
+%% [erlydtl](https://github.com/evanmiller/erlydtl), 
+%% and [mnesia](http://www.erlang.org/doc/man/mnesia.html).
+%%
+%% #### Basics:
+%% * Simple HTTP verb [dispatching](dispatcher.html) mechanism.
+%% * [Parsing](uploader.html) of an inbound multipart/form-data stream.
+%% * Async [polling mechanism](progress.html) for retrieving json describing an upload's progress.
 -module(up).
+
 -behaviour(application).
+
 -export([start/0, start/2, stop/0, stop/1]).
 
-%% @spec start() -> ok
-%% @doc Start the up server.
-start() ->
-    config:ensure(),
-    ensure_started(crypto),
-    application:start(up).
+%% #### Starting:
+%% 1. Ensure crypto has been started (before mochiweb).
+%% 2. Ensure the dependency paths have been set and any dependencies loaded.
+%% 3. Start the datastore (mnesia) and create a schema if neccessary.
+%% 4. Finally, start the [main supervision tree](sup.html).
+start() -> ensure_started(up).
 
-%% @spec start(_Type, _StartArgs) -> ServerRet
-%% @doc application start callback for up.
 start(_Type, _StartArgs) ->
+    ensure_started(crypto),
     config:ensure(),
-    datastore:start(),
-    sup:start_link().
+    datastore:start(), 
+    sup:start().
 
-%% @spec stop() -> ok
-%% @doc Stop the up server.
-stop() ->
-    application:stop(up).
+%% #### Stopping:
+%% To stop the system, the supervisor notifies the children of shutdown.
+%% mnesia will deadlock if you attemp to stop it during an application shutdown,
+%% so it can fend for itself.
+stop() -> application:stop(up).
 
-%% @spec stop(_State) -> ServerRet
-%% @doc application stop callback for up.
-stop(_State) ->
-    ok.
+stop(_State) -> ok.
 
+%% Handle attempting to start a previously started dependency.
 ensure_started(App) ->
     case application:start(App) of
         ok ->
