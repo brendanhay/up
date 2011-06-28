@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <title>render.erl</title>
+  <link rel="stylesheet" href="pycco.css">
+</head>
+<body>
+<div id='container'>
+  <div id="background"></div>
+  
+  <table cellspacing=0 cellpadding=0>
+  <thead>
+    <tr>
+      <th class=docs><h1>render.erl</h1></th>
+      <th class=code></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr id='section-0'>
+      <td class=docs>
+        <div class="octowrap">
+          <a class="octothorpe" href="#section-0">#</a>
+        </div>
+        <p>Wrapper for <code>ErlyDTL</code> which enables:</p>
+<ul>
+<li>Basic application layouts</li>
+<li>Nested templates</li>
+<li>Forced recompilation during development</li>
+</ul>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre><div class="highlight"><pre><span class="p">-</span><span class="ni">module</span><span class="p">(</span><span class="n">render</span><span class="p">).</span>
+
+<span class="p">-</span><span class="ni">export</span><span class="p">([</span><span class="n">view</span><span class="o">/</span><span class="mi">1</span><span class="p">,</span> <span class="n">view</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">layout</span><span class="o">/</span><span class="mi">1</span><span class="p">,</span> <span class="n">partial</span><span class="o">/</span><span class="mi">1</span><span class="p">,</span> <span class="n">partial</span><span class="o">/</span><span class="mi">2</span><span class="p">]).</span>
+<span class="p">-</span><span class="ni">define</span><span class="p">(</span><span class="no">DEVELOPMENT</span><span class="p">,</span> <span class="n">true</span><span class="p">).</span></pre></div></pre></div>
+      </td>
+    </tr><tr id='section-1'>
+      <td class=docs>
+        <div class="octowrap">
+          <a class="octothorpe" href="#section-1">#</a>
+        </div>
+        <p>Views are always rendered inside the application layout,
+and the <code>{title, Title}</code> tuple is passed upwards.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre><div class="highlight"><pre><span class="nf">view</span><span class="p">(</span><span class="nv">Name</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">view</span><span class="p">(</span><span class="nv">Name</span><span class="p">,</span> <span class="p">[]).</span>
+
+<span class="nf">view</span><span class="p">(</span><span class="nv">Name</span><span class="p">,</span> <span class="nv">Vars</span><span class="p">)</span> <span class="o">-&gt;</span>
+    <span class="p">[</span><span class="nv">Title</span><span class="p">,</span> <span class="nv">Vars1</span><span class="p">]</span> <span class="o">=</span> <span class="n">title</span><span class="p">(</span><span class="nv">Vars</span><span class="p">),</span>
+    <span class="nv">Partial</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="nv">Name</span><span class="p">,</span> <span class="nv">Vars1</span><span class="p">),</span>
+    <span class="n">layout</span><span class="p">([</span><span class="nv">Title</span><span class="p">,</span> <span class="p">{</span><span class="n">content</span><span class="p">,</span> <span class="nv">Partial</span><span class="p">}]).</span></pre></div></pre></div>
+      </td>
+    </tr><tr id='section-2'>
+      <td class=docs>
+        <div class="octowrap">
+          <a class="octothorpe" href="#section-2">#</a>
+        </div>
+        <p>Renders the <code>templates/application.dtl</code> template with no parent.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre><div class="highlight"><pre><span class="nf">layout</span><span class="p">(</span><span class="nv">Vars</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">partial</span><span class="p">(</span><span class="s">&quot;application&quot;</span><span class="p">,</span> <span class="nv">Vars</span><span class="p">).</span></pre></div></pre></div>
+      </td>
+    </tr><tr id='section-3'>
+      <td class=docs>
+        <div class="octowrap">
+          <a class="octothorpe" href="#section-3">#</a>
+        </div>
+        <p>Renders a template with no parent.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre><div class="highlight"><pre><span class="nf">partial</span><span class="p">(</span><span class="nv">Name</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">partial</span><span class="p">(</span><span class="nv">Name</span><span class="p">,</span> <span class="p">[]).</span>
+
+<span class="nf">partial</span><span class="p">(</span><span class="nv">Name</span><span class="p">,</span> <span class="nv">Vars</span><span class="p">)</span> <span class="o">-&gt;</span>  
+    <span class="nv">Module</span> <span class="o">=</span> <span class="n">compile</span><span class="p">(</span><span class="nv">Name</span><span class="p">),</span>
+    <span class="p">{</span><span class="n">ok</span><span class="p">,</span> <span class="nv">Content</span><span class="p">}</span> <span class="o">=</span> <span class="nv">Module</span><span class="p">:</span><span class="n">render</span><span class="p">(</span><span class="nv">Vars</span><span class="p">),</span>
+    <span class="nv">Content</span><span class="p">.</span></pre></div></pre></div>
+      </td>
+    </tr><tr id='section-4'>
+      <td class=docs>
+        <div class="octowrap">
+          <a class="octothorpe" href="#section-4">#</a>
+        </div>
+        <p>Forces recompilation of templates during development everytime
+they are requested, as opposed to being compiled once.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre><div class="highlight"><pre><span class="p">-</span><span class="ni">ifdef</span><span class="p">(</span><span class="nv">DEVELOPMENT</span><span class="p">).</span>
+<span class="nf">compile</span><span class="p">(</span><span class="nv">View</span><span class="p">)</span> <span class="o">-&gt;</span>
+    <span class="nv">Path</span> <span class="o">=</span> <span class="nn">config</span><span class="p">:</span><span class="n">template_path</span><span class="p">(</span><span class="nv">View</span><span class="p">),</span>
+    <span class="nv">Module</span> <span class="o">=</span> <span class="n">module_name</span><span class="p">(</span><span class="nv">View</span><span class="p">),</span>
+    <span class="n">ok</span> <span class="o">=</span> <span class="nn">erlydtl</span><span class="p">:</span><span class="n">compile</span><span class="p">(</span><span class="nv">Path</span><span class="p">,</span> <span class="nv">Module</span><span class="p">),</span>
+    <span class="nn">logger</span><span class="p">:</span><span class="n">info</span><span class="p">(</span><span class="s">&quot;Compile&quot;</span><span class="p">,</span> <span class="s">&quot;</span><span class="si">~s</span><span class="s">&quot;</span><span class="p">,</span> <span class="p">[</span><span class="nv">Path</span><span class="p">]),</span>
+    <span class="nv">Module</span><span class="p">.</span>
+<span class="p">-</span><span class="ni">else</span><span class="p">.</span>
+<span class="nf">compile</span><span class="p">(</span><span class="nv">View</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">module_name</span><span class="p">(</span><span class="nv">View</span><span class="p">).</span>
+<span class="p">-</span><span class="ni">endif</span><span class="p">.</span></pre></div></pre></div>
+      </td>
+    </tr><tr id='section-5'>
+      <td class=docs>
+        <div class="octowrap">
+          <a class="octothorpe" href="#section-5">#</a>
+        </div>
+        <p>Get the compiled template name, which by default when compiling
+with <code>rebar</code> always ends in <code>_dtl</code>.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre><div class="highlight"><pre><span class="nf">module_name</span><span class="p">(</span><span class="nv">Name</span><span class="p">)</span> <span class="o">-&gt;</span> 
+    <span class="nv">View</span> <span class="o">=</span> <span class="n">view_name</span><span class="p">(</span><span class="nv">Name</span><span class="p">),</span>
+    <span class="nb">list_to_atom</span><span class="p">(</span><span class="nn">string</span><span class="p">:</span><span class="n">concat</span><span class="p">(</span><span class="nv">View</span><span class="p">,</span> <span class="s">&quot;_dtl&quot;</span><span class="p">)).</span></pre></div></pre></div>
+      </td>
+    </tr><tr id='section-6'>
+      <td class=docs>
+        <div class="octowrap">
+          <a class="octothorpe" href="#section-6">#</a>
+        </div>
+        <p>Return <code>index</code> as the default if no view is specified.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre><div class="highlight"><pre><span class="nf">view_name</span><span class="p">([])</span>                            <span class="o">-&gt;</span> <span class="s">&quot;index&quot;</span><span class="p">;</span></pre></div></pre></div>
+      </td>
+    </tr><tr id='section-7'>
+      <td class=docs>
+        <div class="octowrap">
+          <a class="octothorpe" href="#section-7">#</a>
+        </div>
+        <p>For a proper string, return <code>Name</code> unmodified.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre><div class="highlight"><pre><span class="nf">view_name</span><span class="p">(</span><span class="nv">Name</span><span class="o">=</span><span class="p">[</span><span class="nv">C</span><span class="p">|_])</span> <span class="k">when</span> <span class="nb">is_integer</span><span class="p">(</span><span class="nv">C</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nv">Name</span><span class="p">;</span></pre></div></pre></div>
+      </td>
+    </tr><tr id='section-8'>
+      <td class=docs>
+        <div class="octowrap">
+          <a class="octothorpe" href="#section-8">#</a>
+        </div>
+        <p>For a nested list, return the first item as <code>Name</code>.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre><div class="highlight"><pre><span class="nf">view_name</span><span class="p">([</span><span class="nv">Name</span><span class="p">|_])</span>                      <span class="o">-&gt;</span> <span class="nv">Name</span><span class="p">.</span></pre></div></pre></div>
+      </td>
+    </tr><tr id='section-9'>
+      <td class=docs>
+        <div class="octowrap">
+          <a class="octothorpe" href="#section-9">#</a>
+        </div>
+        <p>Check if the title supplied in <code>Vars</code> exists, and do one of the following:</p>
+<ul>
+<li>Supply a default of ""</li>
+<li>Apply a format string any arguments are specified in the triple</li>
+<li>Return the specified title</li>
+</ul>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre><div class="highlight"><pre><span class="nf">title</span><span class="p">(</span><span class="nv">Vars</span><span class="p">)</span> <span class="o">-&gt;</span>
+    <span class="nv">K</span> <span class="o">=</span> <span class="n">title</span><span class="p">,</span>
+    <span class="nv">Updated</span> <span class="o">=</span> <span class="k">case</span> <span class="nn">lists</span><span class="p">:</span><span class="n">keyfind</span><span class="p">(</span><span class="nv">K</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="nv">Vars</span><span class="p">)</span> <span class="k">of</span>
+        <span class="n">false</span>             <span class="o">-&gt;</span> <span class="p">{</span><span class="nv">K</span><span class="p">,</span> <span class="s">&quot;&quot;</span><span class="p">};</span>
+        <span class="p">{</span><span class="nv">K</span><span class="p">,</span> <span class="nv">Title</span><span class="p">,</span> <span class="p">[]}</span>    <span class="o">-&gt;</span> <span class="p">{</span><span class="nv">K</span><span class="p">,</span> <span class="nv">Title</span><span class="p">};</span>
+        <span class="p">{</span><span class="nv">K</span><span class="p">,</span> <span class="nv">Format</span><span class="p">,</span> <span class="nv">Args</span><span class="p">}</span> <span class="o">-&gt;</span> <span class="p">{</span><span class="nv">K</span><span class="p">,</span> <span class="nn">io_lib</span><span class="p">:</span><span class="n">fwrite</span><span class="p">(</span><span class="nv">Format</span><span class="p">,</span> <span class="nv">Args</span><span class="p">)};</span>
+        <span class="p">{</span><span class="nv">K</span><span class="p">,</span> <span class="nv">Title</span><span class="p">}</span>        <span class="o">-&gt;</span> <span class="p">{</span><span class="nv">K</span><span class="p">,</span> <span class="nv">Title</span><span class="p">}</span>
+    <span class="k">end</span><span class="p">,</span>
+    <span class="p">[</span><span class="nv">Updated</span><span class="p">,</span> <span class="nn">lists</span><span class="p">:</span><span class="n">keyreplace</span><span class="p">(</span><span class="nv">K</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="nv">Vars</span><span class="p">,</span> <span class="nv">Updated</span><span class="p">)].</span>
+
+</pre></div></pre></div>
+      </td>
+    </tr>
+  </table>
+</div>
+</body>
