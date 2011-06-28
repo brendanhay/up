@@ -1,5 +1,9 @@
+// Attempted cross browser compatible JavaScript for submitting a form, minor visual cues,
+// and a XMLHttpRequest to poll the server for progress updates.
 (function() {
+    
     var pageLoad = function() {    
+        // Global timer for progress poll.
         var timer;
         var clearTimer = function() {
             if (undefined !== timer) { 
@@ -7,6 +11,7 @@
             }
         };
     
+        // First time I've ever knowingly used `eval`, honest.
         var noDependenciesNoProblemCrossBrowserJsonParse = function(response) {
             return eval(['(', response, ')'].join(''));
         }
@@ -32,12 +37,15 @@
             };                           
             xhr.send(null);                    
         }
-                   
+               
+        // Remove any existing timer and set a new one to poll for progress.           
         var startProgress = function() {
             clearTimer();
             timer = window.setInterval(function() { trackProgress(); }, 250);            
         }    
         
+        // Update the progress bar's width by setting it to the response.percent,
+        // or hide the progress on error or completed.
         var progressBar = document.getElementById('progress');
         var updateProgress = function(response) {  
             var percent = response.percent;          
@@ -49,6 +57,7 @@
             }
         }
         
+        // Hairy ass function to get the `filename` from the `file` input, accounting for Windows paths.
         var getFileName = function() {
             var path = document.getElementById('file').value;
             var index = (path.indexOf('\\') >= 0 ? path.lastIndexOf('\\') : path.lastIndexOf('/'));
@@ -59,6 +68,7 @@
             return name;
         }; 
                 
+        // Hide the progress and show either an error or success div based on the response.        
         var uploadStatus = document.getElementById('upload_status');
         var hideProgress = function(response) { 
             clearTimer();
@@ -76,6 +86,7 @@
             }
         };
 
+        // Attach the `startProgress` function to the form submit and show/hide the buttons and status.
         var uploadButtons = document.getElementById('upload_buttons');
         var uploadForm = document.getElementById('upload_form');
         if (uploadForm != null && undefined !== uploadForm) {
@@ -88,6 +99,7 @@
         }
     }
         
+    // Check if window supports `onload` and attach the `pageLoad` function.
     if (window.attachEvent) {
         window.attachEvent('onload', pageLoad);
     } else {

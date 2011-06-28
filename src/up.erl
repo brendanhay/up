@@ -21,10 +21,10 @@
 %% 4. Finally, start the [main supervision tree](sup.html).
 start() -> 
     ensure_started(crypto),
-    ensure_started(up).
+    ensure_started(up),
+    logger:info("Start", "Waiting for connections").
 
 start(_Type, _StartArgs) ->
-    
     config:ensure(),
     datastore:start(), 
     sup:start().
