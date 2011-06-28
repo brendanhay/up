@@ -84,7 +84,7 @@
                     document.getElementById('upload_success').style.display = 'block';
                     var showLink = document.getElementById('show_link');
                     showLink.href = response.path;
-                    showLink.innerText = getFileName();
+                    showLink.innerHTML = getFileName();
                 }, 250); 
             }
         };
