@@ -1,15 +1,12 @@
-%% @author Mochi Media <dev@mochimedia.com> 
-%% @copyright 2010 Mochi Media <dev@mochimedia.com>
-
-%% @doc Ensure that the relatively-installed dependencies are on the code
-%%      loading path, and locate resources relative
-%%      to this application's path.
-
+%% Taken from the `mochiweb` skeleton, ensures that the relatively-installed
+%% dependencies are on the code loading path, and locate resources relative
+%% to this application's path.
 -module(config).
 
 -export([ensure/0, ensure/1]).
 -export([tmp_path/1, template_path/1, www_path/0, www_path/1, uploads_path/1, upload_path/1]).
 
+%% Various macros specifying the relative locations of server resources.
 -define(TMP, "priv/tmp/").
 -define(DATA, "priv/data/").
 -define(WWW, "priv/www/").
@@ -18,22 +15,23 @@
 
 -include("records.hrl").
 
-%% @spec ensure() -> ok
-%% @doc Ensure that the ebin and include paths for dependencies of
-%%      this application are on the code path. Equivalent to
-%%      ensure(?Module).
+%% Ensure that the ebin and include paths for dependencies of
+%% this application are on the code path. Equivalent to ensure(?Module).
+%% Sets `mnesia` to write its disk copies into a specified path, as opposed 
+%% to the standard `Mnesia.<nonode>@<nodehost>` in the root directory.
 ensure() ->
     application:set_env(mnesia, dir, local_path([?DATA])),
     ensure(?MODULE).
 
-%% @spec ensure(Module) -> ok
-%% @doc Ensure that all ebin and include paths for dependencies
-%%      of the application for Module are on the code path.
+%% Ensure that all ebin and include paths for dependencies
+%% of the application for Module are on the code path.
 ensure(Module) ->
     code:add_paths(new_siblings(Module)),
     code:clash(),
     ok.
 
+%% Various helper functions for returning the path to directories and resources
+%% used by the application.
 tmp_path(Parts) -> local_path([?TMP|Parts]).
 
 template_path(View) -> local_path([?TEMPLATES, View ++ ".dtl"]).
@@ -47,7 +45,7 @@ upload_path(#upload{id=Id, name=Name}) -> uploads_path([integer_to_list(Id), Nam
 uploads_path(Parts) -> local_path([?UPLOADS|Parts]).
 
 
-% Internal
+%% *Internal function definitions taken from the skeleton `mochiweb:..._deps` module*
 
 local_path(Parts, Module) -> filename:join([get_base_dir(Module) | Parts]).
 
