@@ -100,23 +100,24 @@ body_end(Field, Context=#con{io=IO}) ->
 %% that only apply to any file inputs from the received form data.                                   
 file_started(Context=#con{key=Key, upload=Upload}) -> 
     logger:info(Key, "~p bytes pending", [Context#con.total]),
-    progress:notify({started, Key, Upload#upload.id}), 
+    progress:update({started, Key, Upload#upload.id}), 
     {file, Context}.
 
 file_updated(Context=#con{key=Key, total=Total, done=Done}) ->
     Percent = percentage(Done, Total),
     logger:info(Key, "~p% of ~p bytes", [Percent, Context#con.total]),
-    progress:notify({updated, Key, Percent}), 
+    progress:update({updated, Key, Percent}), 
     {file, Context}.
 
 file_completed(Context=#con{key=Key}) -> 
     logger:info(Key, "completed"),
-    progress:notify({completed, Key}), 
+    progress:update({completed, Key}), 
     {file, Context}.
 
 %% Saves the `upload` record using [[datastore.erl]] and gets the
 %% `upload_path` to copy the temporary file to.
 save(#con{path=Path, upload=Upload}) ->
+    logger:info(Path, "~p saving", [Upload]),
     To = config:upload_path(datastore:save(Upload)),
     move(Path, To).
 

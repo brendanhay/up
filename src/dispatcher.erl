@@ -30,7 +30,7 @@ stop() -> mochiweb_http:stop(?MODULE).
 %% Returns a `JSON` response (`/templates/progress.dtl`) containing 
 %% the `id` and `percent` completed for a current upload.
 'GET'(["progress", Key], Req) ->
-    js(Req, "progress", uploader:progress(Key));
+    js(Req, "progress", progress:report(Key));
 %% Serves an existing `upload` for `Id` via `serve_upload/2` or a `404` page.
 'GET'(["show", Id], Req) ->
     case datastore:find(Id) of
@@ -47,7 +47,7 @@ stop() -> mochiweb_http:stop(?MODULE).
     
 %% Starts the upload process on the connected socket and returns an empty page when completed.
 'POST'([], Req) ->
-    uploader:upload(Req),
+    uploader:start(Req),
     Req:respond({200, [{"Content-Type", ?TEXT}], ""}).
 
 

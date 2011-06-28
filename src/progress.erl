@@ -6,7 +6,7 @@
 
 -behaviour(gen_server).
 
--export([start/0, progress/1, notify/1]).
+-export([start/0, report/1, update/1]).
 -export([init/1, terminate/2, code_change/3, handle_call/3, handle_cast/2, handle_info/2]).
 
 -include("records.hrl").
@@ -17,16 +17,16 @@
 start() -> gen_server:start_link({local, ?MODULE}, ?MODULE, [], []).
 
 %% Synchronously poll for progress from the state loop.
-progress(Key) when is_list(Key) -> progress(list_to_binary(Key));
-progress(Key)                   -> gen_server:call(?MODULE, {progress, Key}). 
+report(Key) when is_list(Key) -> report(list_to_binary(Key));
+report(Key)                   -> gen_server:call(?MODULE, {report, Key}). 
 
 %% Send an asynchronous message to the state loop.
 %% Used by [[uploader.erl]] to update the internal progress state. 
-notify(Message) -> gen_server:cast(?MODULE, Message).
+update(Message) -> gen_server:cast(?MODULE, Message).
 
 %% Get the progress for a given binary `Key`, and return
 %% the retrieved values or `{0, 100}` if the `Key` doesn't exist. 
-handle_call({progress, Key}, _From, State) ->
+handle_call({report, Key}, _From, State) ->
     {Id, Percent} = case dict:find(Key, State) of 
                         error -> {0, 100};
                         {ok, {I, P}} -> {I, P}
@@ -45,7 +45,8 @@ handle_cast({updated, Key, Percent}, State) ->
     {noreply, New};
 %% Remove the `Key` from `State`, effectively marking it as completed.
 handle_cast({completed, Key}, State) ->
-    {noreply, dict:erase(Key, State)}.
+%    {noreply, dict:erase(Key, State)}.
+    {noreply, State}.
 
 
 %% *Callbacks for the `gen_server` behaviour:*
