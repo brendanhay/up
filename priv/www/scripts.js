@@ -35,7 +35,10 @@
                     }
                 }
             };                           
-            xhr.send(null);                    
+            xhr.send(null);  
+              
+            document.getElementById('file').disabled = true;
+            document.getElementById('description').disabled = true;                
         }
                
         // Remove any existing timer and set a new one to poll for progress.           
