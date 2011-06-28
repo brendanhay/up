@@ -42,12 +42,15 @@ find(Id) ->
 build() -> #upload{id=next_upload_id(), created=erlang:localtime()}.
 
 %% Save an `upload` record optionally setting its `Id` if none is specified.
-save(Upload=#upload{id=Id}) ->
-    NewId = case Id of
-                none -> next_upload_id();
-                Id -> Id
-            end,
-    execute(fun mnesia:write/1, [Upload#upload{id=NewId}]),
+%% Performs basic validation of a record.
+save(Upload=#upload{name=none}) -> 
+    Upload;
+save(Upload=#upload{description=none}) -> 
+    Upload;
+save(Upload=#upload{id=none}) ->
+    save(Upload#upload{id=next_upload_id()};
+save(Upload=#upload{}) ->
+    execute(fun mnesia:write/1, [Upload]),
     Upload.
 
 %% Safely generate a new id for an upload, using a seperate table to store previous ids
