@@ -1,0 +1,4 @@
+<div class="error">
+  <h2>404 - Probably your fault.</h2> 
+  <span>{{ title }}</span>
+</div>

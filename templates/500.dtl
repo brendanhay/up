@@ -1,0 +1,4 @@
+<div class="error">
+  <h2>500 - What have you done?</h2> 
+  <span>{{ title }}</span>
+</div>
