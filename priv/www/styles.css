@@ -57,68 +57,68 @@ html { }
 body {
   font: 14px/1.5 'Helvetica Neue', Helvetica, Arial, Sans, sans-serif;
   background-color: #262b32;
-  color: #C3C3C3;	
+  color: #C3C3C3;  
   width: 920px;
   margin: auto; }
 
 h1, h2 {
   font-family: "Francois One", 'Helvetica Neue', Helvetica, Arial, Sans, sans-serif;
   font-size: 3em;
-	line-height: 1.5;
+  line-height: 1.5;
   color: #ffef9e;
   text-transform: uppercase;
   margin-bottom: 1em; }
 
 h2 {
-	font-size: 2em;
+  font-size: 2em;
 }
 
 h1 {
-	margin: 20px 0 0;
-	text-align: center;
+  margin: 20px 0 0;
+  text-align: center;
 }
 
 h1 a:link, h1 a:hover, h1 a:visited { 
   color: #ffef9e;
-	text-decoration: none; 
+  text-decoration: none; 
 }
 
 a, a:link, a:visited { 
-	color: #ff8f3c;
-	text-decoration: none; }
-	
+  color: #ff8f3c;
+  text-decoration: none; }
+  
 a:hover, a:active { 
-	text-decoration: underline; }
+  text-decoration: underline; }
 
 #nav {
-	width: 237px;
-	margin: 0 auto 20px;
-	list-style: none;
-	overflow: hidden;
+  width: 237px;
+  margin: 0 auto 20px;
+  list-style: none;
+  overflow: hidden;
 }
 
 #nav li {
-	display: inline;
+  display: inline;
 }
 
 #nav li a {
-	float: left;
-	padding: 8px 12px;
-	display: block;
+  float: left;
+  padding: 8px 12px;
+  display: block;
 }
 
 /* New */
 
 .file, .text, .buttons, .status, .notification {
-	position: relative;
+  position: relative;
 }
 
 .wrapper, .buttons {
-	width: 530px;
-	margin-left: 200px;
-	padding: 10px;	
-	border-top: solid 1px #22272e;
-	background: #242930;
+  width: 530px;
+  margin-left: 200px;
+  padding: 10px;  
+  border-top: solid 1px #22272e;
+  background: #242930;
 }
 
 .notification, .status {
@@ -134,117 +134,117 @@ a:hover, a:active {
 }
 
 .text .wrapper {
-	padding-bottom: 5px;
+  padding-bottom: 5px;
 }
 
 .text textarea {
-	width: 524px;
-	height: 150px;
-	border: solid 1px #13161a;
-	border-bottom-color: #22272e;
+  width: 524px;
+  height: 150px;
+  border: solid 1px #13161a;
+  border-bottom-color: #22272e;
 }
 
 .buttons {
-	text-align: center;
+  text-align: center;
 }
 
 .buttons input {
-	font-size: 1.75em;
+  font-size: 1.75em;
 }
 
 span.note {
   padding: 1px 2px 2px;
-  background: #22272e;	
+  background: #22272e;  
 }
 
 .status .wrapper {
-	padding-bottom: 9px;
+  padding-bottom: 9px;
 }
 
-.status .bar {	
-	height: 22px;
-	width: 529px;
-	background: #22272e;
-	border: solid 1px #21252b;
-	border-bottom-color: #252a30;
-	border-right-color: #252a30;
+.status .bar {  
+  height: 22px;
+  width: 529px;
+  background: #22272e;
+  border: solid 1px #21252b;
+  border-bottom-color: #252a30;
+  border-right-color: #252a30;
 }
 
 .bar .progress {
-	height: 22px;
-	width: 1px;
-	background: #404c5c;
+  height: 22px;
+  width: 1px;
+  background: #404c5c;
 
 }
 
 label {
-	top: 11px;
-	right: 730px;
-	font-weight: bold;
-	padding: 1px 5px;
-	position: absolute;
-  background: #22272e;	
+  top: 11px;
+  right: 730px;
+  font-weight: bold;
+  padding: 1px 5px;
+  position: absolute;
+  background: #22272e;  
 }
 
 /* Index */
 table {
-	width: 600px;
-	margin: 0 auto;
+  width: 600px;
+  margin: 0 auto;
 }
 
 thead th {
-	padding: 0px 8px 8px;
+  padding: 0px 8px 8px;
 }
 
 table tfoot td { 
-	overflow: hidden;
-	padding: 8px;
+  overflow: hidden;
+  padding: 8px;
 }
 
 thead th span, .count, .pagination a {
-	font-weight: bold;
-	padding: 1px 5px 2px;
+  font-weight: bold;
+  padding: 1px 5px 2px;
   background: #22272e;
 }
 
 tbody td {
-	padding: 4px 10px;
-	border-top: solid 1px #22272e;
-	background: #242930;	
+  padding: 4px 10px;
+  border-top: solid 1px #22272e;
+  background: #242930;  
 }
 
 tbody tr {
-	margin-bottom: 1px;
+  margin-bottom: 1px;
 }
 
 .name {
-	white-space: nowrap;
-	width: 10px;
+  white-space: nowrap;
+  width: 10px;
 }
 
 .created {
-	text-align: right;
+  text-align: right;
 }
 
 .count {
-	float: left;
+  float: left;
 }
 
 .pagination {
-	float: right;
+  float: right;
 }
 
 .error {
-	text-align: center;
+  text-align: center;
 }
 
 .error h2 {
-	margin: 0;
+  margin: 0;
 }
 
 .error span {
-	padding: 1px 5px 2px;
-	font-size: 14px;
-	font-weight: bold;
-  background: #22272e;	
+  padding: 1px 5px 2px;
+  font-size: 14px;
+  font-weight: bold;
+  background: #22272e;  
 }
